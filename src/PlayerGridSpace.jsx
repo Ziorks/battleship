@@ -1,18 +1,27 @@
 import { useState } from "react";
 
-export function PlayerGridSpace({ key }) {
+export function PlayerGridSpace({ placeShip, remainingShips }) {
   const [state, setState] = useState({ bombed: false, ship: false });
 
   function handleClick() {
-    setState({ ...state, bombed: true });
+    if (remainingShips > 0) {
+      placeShip();
+      setState({ ...state, ship: true });
+    } else {
+      setState({ ...state, bombed: true });
+    }
   }
 
   return (
     <div
-      className={"gridSpace playerGridSpace" + (state.bombed ? " bombed" : "")}
+      className={
+        "gridSpace playerGridSpace" +
+        (state.bombed ? " bombed" : "") +
+        (state.ship ? " ship" : "")
+      }
       onClick={handleClick}
     >
-      <i class="fa-regular fa-circle-dot"></i>
+      <i className="fa-regular fa-circle-dot"></i>
     </div>
   );
 }

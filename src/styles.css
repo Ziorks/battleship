@@ -5,18 +5,24 @@
 }
 
 body {
-    background: radial-gradient(rgb(7, 22, 31) 5%, rgb(26, 18, 34) 80%, rgb(18, 11, 56));
+    background: radial-gradient(rgb(12, 36, 51) 5%, rgb(43, 30, 56) 80%, rgb(26, 17, 82));
     height: 100vh;
+}
+
+.instructions {
+    color: white;
+    text-align: center;
 }
 
 .playerBoard {
     color: white;
     display: grid;
-    position: absolute;
+    width: 362px;
     grid-template-columns: repeat(11, 2em);
     grid-template-rows: repeat(11, 2em);
     gap: 1px;
     background-color: grey;
+    margin: 0 auto;
 }
 
 .gridSpace {
@@ -41,4 +47,8 @@ body {
 
 .bombed {
     color: red;
+}
+
+.ship {
+    background-color: grey;
 }
