@@ -1,5 +1,7 @@
+import { PlayerBoard } from "./PlayerBoard";
+
 function App() {
-  return <h1>Insert Battleship Here</h1>;
+  return <PlayerBoard />;
 }
 
 export default App;
