@@ -10,13 +10,13 @@ export function PlayerBoard({ placeShip, remainingShips }) {
         playerGrid.push(<div key="corner" className="gridSpace"></div>);
       } else if (row === 10 && column !== 0) {
         playerGrid.push(
-          <p key={"column" + columnLabel} className="gridSpace">
+          <p key={columnLabel} className="gridSpace">
             {columnLabel}
           </p>
         );
       } else if (column === 0) {
         playerGrid.push(
-          <p key={"row" + rowLabel} className="gridSpace">
+          <p key={rowLabel} className="gridSpace">
             {rowLabel}
           </p>
         );
