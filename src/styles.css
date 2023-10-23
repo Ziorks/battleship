@@ -39,14 +39,19 @@ body {
     cursor: default;
 }
 
-.playerGridSpace:hover {
+.playableGridSpace:hover {
     background-color: rgb(25, 25, 25);
     color: rgb(133, 189, 206);
     cursor: pointer;
 }
 
-.bombed {
-    color: red;
+.placingShip {
+    background-color: green;
+}
+
+.placingShip:hover{
+    background-color: green;
+    color: white;
 }
 
 .ship {
