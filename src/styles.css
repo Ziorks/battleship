@@ -1,59 +1,104 @@
 * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
-    background: radial-gradient(rgb(12, 36, 51) 5%, rgb(43, 30, 56) 80%, rgb(26, 17, 82));
-    height: 100vh;
+  background: radial-gradient(
+    rgb(12, 36, 51) 5%,
+    rgb(43, 30, 56) 80%,
+    rgb(26, 17, 82)
+  );
+  height: 100vh;
+}
+
+.btn {
+  padding: 5px 10px;
+  cursor: pointer;
+  animation: 10s infinite linear hueShift;
+  border: none;
+  background-color: black;
+  font-size: 1.2rem;
+}
+
+.btn:hover {
+  box-shadow: 5px 5px 30px;
 }
 
 .instructions {
-    color: white;
-    text-align: center;
+  color: white;
+  text-align: center;
+}
+
+.instructions > * {
+  margin: 5px;
 }
 
 .playerBoard {
-    color: white;
-    display: grid;
-    width: 362px;
-    grid-template-columns: repeat(11, 2em);
-    grid-template-rows: repeat(11, 2em);
-    gap: 1px;
-    background-color: grey;
-    margin: 50px auto 0;
+  color: white;
+  display: grid;
+  width: 362px;
+  grid-template-columns: repeat(11, 2em);
+  grid-template-rows: repeat(11, 2em);
+  gap: 1px;
+  background-color: grey;
+  margin: 50px auto 0;
 }
 
 .gridSpace {
-    height: 100%;
-    width: 100%;
-    background-color: black;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .gridSpace:hover {
-    cursor: default;
+  cursor: default;
 }
 
 .playableGridSpace:hover {
-    background-color: rgb(25, 25, 25);
-    color: rgb(133, 189, 206);
-    cursor: pointer;
+  background-color: rgb(25, 25, 25);
+  color: rgb(133, 189, 206);
+  cursor: pointer;
 }
 
 .placingShip {
-    background-color: green;
+  background-color: green;
 }
 
-.placingShip:hover{
-    background-color: green;
-    color: white;
+.placingShip:hover {
+  background-color: green;
+  color: white;
 }
 
 .ship {
-    background-color: grey;
+  background-color: grey;
+}
+
+@keyframes hueShift {
+  0% {
+    color: rgb(255, 0, 0);
+  }
+  17% {
+    color: rgb(255, 255, 0);
+  }
+  34% {
+    color: rgb(0, 255, 0);
+  }
+  51% {
+    color: rgb(0, 255, 255);
+  }
+  68% {
+    color: rgb(0, 0, 255);
+  }
+  85% {
+    color: rgb(255, 0, 255);
+  }
+  100% {
+    color: rgb(255, 0, 0);
+  }
 }

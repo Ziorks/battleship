@@ -19,16 +19,6 @@ function App() {
 
   const [playerBoard, setPlayerBoard] = useState(generateBoardArray());
 
-  //This works but is real slow to update
-  //
-  // window.addEventListener("keydown", (e) => {
-  //   if (e.key === "r") {
-  //     setState((currentState) => {
-  //       return { ...currentState, horizontal: !currentState.horizontal };
-  //     });
-  //   }
-  // });
-
   function placeShip() {
     if (
       !playerBoard.reduce(
@@ -54,7 +44,7 @@ function App() {
     }
   }
 
-  function handleHover(row, column) {
+  function handleMouseEnter(row, column) {
     if (state.remainingShips > 0) {
       setPlayerBoard((currentBoard) => {
         return currentBoard.map((tile) => {
@@ -88,11 +78,20 @@ function App() {
     }
   }
 
+  function handleMouseLeave() {
+    setPlayerBoard((currentBoard) => {
+      return currentBoard.map((tile) => {
+        return { ...tile, placingShip: false };
+      });
+    });
+  }
+
   return (
     <>
       <PlayerBoard
         playerBoard={playerBoard}
-        handleHover={handleHover}
+        handleMouseEnter={handleMouseEnter}
+        handleMouseLeave={handleMouseLeave}
         placeShip={placeShip}
       />
       {state.remainingShips > 0 && (
@@ -103,7 +102,14 @@ function App() {
             {" - "}
             {ships[state.remainingShips - 1].size} spaces
           </p>
-          <p>press 'r' to rotate</p>
+          <button
+            className="btn"
+            onClick={() =>
+              setState({ ...state, horizontal: !state.horizontal })
+            }
+          >
+            Rotate Ship
+          </button>
         </div>
       )}
     </>

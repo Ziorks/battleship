@@ -1,6 +1,11 @@
 import { PlayerBoardSpace } from "./PlayerBoardSpace";
 
-export function PlayerBoard({ playerBoard, handleHover, placeShip }) {
+export function PlayerBoard({
+  playerBoard,
+  handleMouseEnter,
+  handleMouseLeave,
+  placeShip,
+}) {
   return (
     <div className="playerBoard">
       {playerBoard.map((item) => {
@@ -8,7 +13,8 @@ export function PlayerBoard({ playerBoard, handleHover, placeShip }) {
           <PlayerBoardSpace
             key={item.column + item.row}
             props={item}
-            handleHover={handleHover}
+            handleMouseEnter={handleMouseEnter}
+            handleMouseLeave={handleMouseLeave}
             placeShip={placeShip}
           />
         );
