@@ -8,12 +8,19 @@ export function PlayerBoardSpace({
     return (
       <div
         onClick={placeShip}
-        onMouseOver={() => handleMouseEnter(props.row, props.column)}
+        onMouseEnter={() => handleMouseEnter(props.row, props.column)}
         onMouseLeave={handleMouseLeave}
         className={
           "gridSpace playableGridSpace" +
-          (props.ship ? " ship" : "") +
-          (props.placingShip ? " placingShip" : "")
+          (props.placingShip === "allok"
+            ? " allok"
+            : props.placingShip === "valid"
+            ? " valid"
+            : props.placingShip === "invalid"
+            ? " invalid"
+            : props.ship
+            ? " ship"
+            : "")
         }
       >
         <i className="fa-regular fa-circle-dot"></i>

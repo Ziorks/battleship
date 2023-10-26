@@ -6,7 +6,7 @@ export function generateBoardArray() {
     playable: false,
     hit: false,
     ship: false,
-    placingShip: false,
+    placingShip: "",
   };
 
   for (let row = 0; row < 11; row++) {
@@ -30,4 +30,41 @@ export function generateBoardArray() {
     }
   }
   return boardArray;
+}
+
+export function getTilesForPlacement(row, column, playerBoard, state, ships) {
+  let tiles = [];
+  let tile = {};
+  let anyInvalid = false;
+  const shipLength = ships[state.remainingShips - 1].size;
+
+  for (let i = 0; i < shipLength; i++) {
+    if (state.horizontal) {
+      // tile = playerBoard[(10 - row) * 11 + (column.charCodeAt() + i) - 64]; //faster but gotta fix wrapping
+      tile = playerBoard.find(
+        (item) =>
+          item.column === String.fromCharCode(column.charCodeAt() + i) &&
+          item.row === row
+      );
+    } else {
+      const index = (10 - row - i) * 11 + column.charCodeAt() - 64;
+      tile = playerBoard[index];
+    }
+    if (tile === undefined) {
+      anyInvalid = true;
+    } else if (tile.ship) {
+      anyInvalid = true;
+      tiles.push({ ...tile, placingShip: "invalid" });
+    } else {
+      tiles.push({ ...tile, placingShip: "allok" });
+    }
+  }
+  if (anyInvalid) {
+    tiles = tiles.map((tile) => {
+      return tile.placingShip === "allok"
+        ? { ...tile, placingShip: "valid" }
+        : tile;
+    });
+  }
+  return tiles;
 }

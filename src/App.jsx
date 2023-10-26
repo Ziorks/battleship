@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PlayerBoard } from "./PlayerBoard";
-import { generateBoardArray } from "./utilities";
+import { generateBoardArray, getTilesForPlacement } from "./utilities";
 
 const ships = [
   { name: "Destroyer", size: 2 },
@@ -20,12 +20,7 @@ function App() {
   const [playerBoard, setPlayerBoard] = useState(generateBoardArray());
 
   function placeShip() {
-    if (
-      !playerBoard.reduce(
-        (accum, tile) => accum || (tile.ship && tile.placingShip),
-        false
-      )
-    ) {
+    if (playerBoard.find((tile) => tile.placingShip === "allok")) {
       setState((currentState) => {
         return {
           ...currentState,
@@ -34,8 +29,8 @@ function App() {
       });
       setPlayerBoard((currentBoard) => {
         return currentBoard.map((tile) => {
-          if (tile.placingShip) {
-            return { ...tile, ship: true, placingShip: false };
+          if (tile.placingShip !== "") {
+            return { ...tile, ship: true, placingShip: "" };
           } else {
             return tile;
           }
@@ -46,42 +41,34 @@ function App() {
 
   function handleMouseEnter(row, column) {
     if (state.remainingShips > 0) {
-      setPlayerBoard((currentBoard) => {
-        return currentBoard.map((tile) => {
-          if (state.horizontal) {
-            const shipLength = ships[state.remainingShips - 1].size;
-            if (
-              tile.row === row &&
-              tile.column >= column &&
-              tile.column.charCodeAt() < column.charCodeAt() + shipLength &&
-              column.charCodeAt() + shipLength <= 75
-            ) {
-              return { ...tile, placingShip: true };
-            } else {
-              return { ...tile, placingShip: false };
-            }
-          } else {
-            const shipLength = ships[state.remainingShips - 1].size;
-            if (
-              tile.column === column &&
-              tile.row >= row &&
-              tile.row < row + shipLength &&
-              row + shipLength <= 11
-            ) {
-              return { ...tile, placingShip: true };
-            } else {
-              return { ...tile, placingShip: false };
-            }
+      const shipTiles = getTilesForPlacement(
+        row,
+        column,
+        playerBoard,
+        state,
+        ships
+      );
+      let newBoard = [...playerBoard];
+      for (let i = 0; i < newBoard.length; i++) {
+        for (let j = 0; j < shipTiles.length; j++) {
+          if (
+            shipTiles[j].row === newBoard[i].row &&
+            shipTiles[j].column === newBoard[i].column
+          ) {
+            newBoard[i] = shipTiles[j];
+            break;
           }
-        });
-      });
+        }
+      }
+
+      setPlayerBoard(newBoard);
     }
   }
 
   function handleMouseLeave() {
     setPlayerBoard((currentBoard) => {
       return currentBoard.map((tile) => {
-        return { ...tile, placingShip: false };
+        return { ...tile, placingShip: "" };
       });
     });
   }
