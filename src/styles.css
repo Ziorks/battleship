@@ -42,7 +42,7 @@ body {
   grid-template-columns: repeat(11, 2em);
   grid-template-rows: repeat(11, 2em);
   gap: 1px;
-  background-color: grey;
+  background-color: rgba(140, 177, 140, 0.233);
   margin: 50px auto 0;
 }
 

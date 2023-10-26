@@ -50,6 +50,7 @@ function App() {
       );
       let newBoard = [...playerBoard];
       for (let i = 0; i < newBoard.length; i++) {
+        newBoard[i] = { ...newBoard[i], placingShip: "" };
         for (let j = 0; j < shipTiles.length; j++) {
           if (
             shipTiles[j].row === newBoard[i].row &&
@@ -60,7 +61,6 @@ function App() {
           }
         }
       }
-
       setPlayerBoard(newBoard);
     }
   }

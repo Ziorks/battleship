@@ -1,15 +1,9 @@
-export function PlayerBoardSpace({
-  props,
-  handleMouseEnter,
-  handleMouseLeave,
-  placeShip,
-}) {
+export function PlayerBoardSpace({ props, handleMouseEnter, placeShip }) {
   if (props.playable) {
     return (
       <div
         onClick={placeShip}
         onMouseEnter={() => handleMouseEnter(props.row, props.column)}
-        onMouseLeave={handleMouseLeave}
         className={
           "gridSpace playableGridSpace" +
           (props.placingShip === "allok"

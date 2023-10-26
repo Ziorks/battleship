@@ -7,14 +7,13 @@ export function PlayerBoard({
   placeShip,
 }) {
   return (
-    <div className="playerBoard">
+    <div onMouseLeave={handleMouseLeave} className="playerBoard">
       {playerBoard.map((item) => {
         return (
           <PlayerBoardSpace
             key={item.column + item.row}
             props={item}
             handleMouseEnter={handleMouseEnter}
-            handleMouseLeave={handleMouseLeave}
             placeShip={placeShip}
           />
         );
