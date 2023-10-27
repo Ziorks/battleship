@@ -32,33 +32,43 @@ export function generateBoardArray() {
   return boardArray;
 }
 
-export function getTilesForPlacement(row, column, playerBoard, state, ships) {
+export function renderShipPreview(row, column, playerBoard, state, ships) {
   let tiles = [];
   let tile = {};
+  let indices = [];
   let anyInvalid = false;
+  let newBoard = playerBoard.map((item) => {
+    return { ...item, placingShip: "" };
+  });
   const shipLength = ships[state.remainingShips - 1].size;
+  const rowLength = 11;
 
   for (let i = 0; i < shipLength; i++) {
+    const intColumn = column.charCodeAt() - 64;
+    let index = undefined;
     if (state.horizontal) {
-      // tile = playerBoard[(10 - row) * 11 + (column.charCodeAt() + i) - 64]; //faster but gotta fix wrapping
-      tile = playerBoard.find(
-        (item) =>
-          item.column === String.fromCharCode(column.charCodeAt() + i) &&
-          item.row === row
-      );
+      if (intColumn + i < rowLength) {
+        index = (10 - row) * rowLength + intColumn + i;
+      } else {
+        tile = undefined;
+      }
     } else {
-      const index = (10 - row - i) * 11 + column.charCodeAt() - 64;
-      tile = playerBoard[index];
+      index = (10 - row - i) * rowLength + intColumn;
     }
+    tile = playerBoard[index];
+
     if (tile === undefined) {
       anyInvalid = true;
     } else if (tile.ship) {
       anyInvalid = true;
       tiles.push({ ...tile, placingShip: "invalid" });
+      indices.push(index);
     } else {
       tiles.push({ ...tile, placingShip: "allok" });
+      indices.push(index);
     }
   }
+
   if (anyInvalid) {
     tiles = tiles.map((tile) => {
       return tile.placingShip === "allok"
@@ -66,5 +76,10 @@ export function getTilesForPlacement(row, column, playerBoard, state, ships) {
         : tile;
     });
   }
-  return tiles;
+
+  for (let i = 0; i < indices.length; i++) {
+    newBoard[indices[i]] = tiles[i];
+  }
+
+  return newBoard;
 }

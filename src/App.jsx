@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PlayerBoard } from "./PlayerBoard";
-import { generateBoardArray, getTilesForPlacement } from "./utilities";
+import { generateBoardArray, renderShipPreview } from "./utilities";
 
 const ships = [
   { name: "Destroyer", size: 2 },
@@ -41,26 +41,13 @@ function App() {
 
   function handleMouseEnter(row, column) {
     if (state.remainingShips > 0) {
-      const shipTiles = getTilesForPlacement(
+      const newBoard = renderShipPreview(
         row,
         column,
         playerBoard,
         state,
         ships
       );
-      let newBoard = [...playerBoard];
-      for (let i = 0; i < newBoard.length; i++) {
-        newBoard[i] = { ...newBoard[i], placingShip: "" };
-        for (let j = 0; j < shipTiles.length; j++) {
-          if (
-            shipTiles[j].row === newBoard[i].row &&
-            shipTiles[j].column === newBoard[i].column
-          ) {
-            newBoard[i] = shipTiles[j];
-            break;
-          }
-        }
-      }
       setPlayerBoard(newBoard);
     }
   }
