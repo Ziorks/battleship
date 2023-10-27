@@ -66,19 +66,55 @@ body {
 }
 
 .allok {
-  background-color: green;
+  animation: greenPulse linear infinite 1.5s;
 }
 
 .valid {
-  background-color: orange;
+  animation: orangePulse linear infinite 1.5s;
 }
 
 .invalid {
-  background-color: red;
+  animation: redPulse linear infinite 1.5s;
 }
 
 .ship {
   background-color: grey;
+}
+
+@keyframes greenPulse {
+  0% {
+    background-color: rgba(0, 200, 0, 60%);
+  }
+  50% {
+    background-color: rgba(0, 200, 0, 25%);
+  }
+  100% {
+    background-color: rgba(0, 200, 0, 60%);
+  }
+}
+
+@keyframes orangePulse {
+  0% {
+    background-color: rgba(255, 165, 0, 75%);
+  }
+  50% {
+    background-color: rgba(255, 165, 0, 50%);
+  }
+  100% {
+    background-color: rgba(255, 165, 0, 75%);
+  }
+}
+
+@keyframes redPulse {
+  0% {
+    background-color: rgba(255, 0, 0, 75%);
+  }
+  50% {
+    background-color: rgba(255, 0, 0, 50%);
+  }
+  100% {
+    background-color: rgba(255, 0, 0, 75%);
+  }
 }
 
 @keyframes hueShift {
