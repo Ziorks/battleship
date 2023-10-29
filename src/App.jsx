@@ -11,25 +11,22 @@ const ships = [
 ];
 
 function App() {
+  const [playerBoard, setPlayerBoard] = useState(generateBoardArray());
   const [state, setState] = useState({
     remainingShips: ships.length,
     horizontal: false,
     playerTurn: true,
   });
 
-  const [playerBoard, setPlayerBoard] = useState(generateBoardArray());
-
   function placeShip() {
     if (playerBoard.find((tile) => tile.placingShip === "allok")) {
-      setState((currentState) => {
-        return {
-          ...currentState,
-          remainingShips: currentState.remainingShips - 1,
-        };
+      setState({
+        ...state,
+        remainingShips: state.remainingShips - 1,
       });
       setPlayerBoard((currentBoard) => {
         return currentBoard.map((tile) => {
-          if (tile.placingShip !== "") {
+          if (tile.placingShip === "allok") {
             return { ...tile, ship: true, placingShip: "" };
           } else {
             return tile;
@@ -60,6 +57,48 @@ function App() {
     });
   }
 
+  function placeAllRandom() {
+    let remaining = state.remainingShips;
+    let newBoard = [...playerBoard];
+    let index = null;
+
+    while (remaining > 0) {
+      let tempBoard = [];
+
+      do {
+        const randomBool = Boolean(Math.floor(Math.random() + 0.5));
+        const randomRow = Math.floor(Math.random() * 10) + 1;
+        const randomColumnInt = Math.floor(Math.random() * 10 + 1);
+        const randomColumnStr = String.fromCharCode(randomColumnInt + 64);
+        index = (10 - randomRow) * 11 + randomColumnInt;
+        tempBoard = [...newBoard];
+
+        tempBoard = renderShipPreview(
+          randomRow,
+          randomColumnStr,
+          tempBoard,
+          { ...state, remainingShips: remaining, horizontal: randomBool },
+          ships
+        );
+      } while (tempBoard[index].placingShip !== "allok");
+
+      newBoard = tempBoard.map((tile) => {
+        if (tile.placingShip === "allok") {
+          return { ...tile, ship: true, placingShip: "" };
+        } else {
+          return tile;
+        }
+      });
+      remaining--;
+    }
+
+    setState({
+      ...state,
+      remainingShips: 0,
+    });
+    setPlayerBoard(newBoard);
+  }
+
   return (
     <>
       <PlayerBoard
@@ -83,6 +122,9 @@ function App() {
             }
           >
             Rotate Ship
+          </button>
+          <button className="btn" onClick={() => placeAllRandom()}>
+            Place Remaining Ships Randomly
           </button>
         </div>
       )}
