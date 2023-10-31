@@ -1,6 +1,6 @@
-export function Instructions({ ships, state, toggleRotation, placeAllRandom }) {
-  return (
-    <div className="instructions">
+export function Instructions({ ships, state, toggleRotation }) {
+  return state.remainingShips > 0 ? (
+    <div className="instructions-player">
       <h1>Place your ships</h1>
       <p>
         now placing: {ships[state.remainingShips - 1].name}
@@ -10,9 +10,11 @@ export function Instructions({ ships, state, toggleRotation, placeAllRandom }) {
       <button className="btn" onClick={() => toggleRotation()}>
         Rotate Ship
       </button>
-      <button className="btn" onClick={() => placeAllRandom()}>
-        Place Remaining Ships Randomly
-      </button>
+    </div>
+  ) : (
+    <div className="instructions-computer">
+      <h1>It's your turn</h1>
+      <p>click a square to bomb it!</p>
     </div>
   );
 }

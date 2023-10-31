@@ -3,7 +3,7 @@ export function PlayerBoardSpace({ props, handleMouseEnter, placeShip }) {
     return (
       <div
         onClick={placeShip}
-        onMouseEnter={() => handleMouseEnter(props.row, props.column)}
+        onMouseOver={() => handleMouseEnter(props.row, props.column)}
         className={
           "gridSpace playableGridSpace" +
           (props.placingShip === "allok"

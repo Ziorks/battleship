@@ -11,6 +11,7 @@ body {
     rgb(26, 17, 82)
   );
   height: 100vh;
+  color: white;
 }
 
 .btn {
@@ -26,37 +27,71 @@ body {
   box-shadow: 5px 5px 30px;
 }
 
-.instructions {
-  color: white;
+h1 {
+  grid-area: title;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.instructions-player {
+  grid-area: playerInstructions;
   text-align: center;
 }
 
-.instructions > * {
+.instructions-player > * {
+  margin: 5px;
+}
+
+.instructions-computer {
+  grid-area: computerInstructions;
+  text-align: center;
+}
+
+.instructions-computer > * {
   margin: 5px;
 }
 
 .gameSpace {
-  display: flex;
-  align-items: center;
-  width: 362px;
-  margin: 50px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, auto);
+  grid-template-areas:
+    "title title title"
+    "playerTitle computerTitle logTitle"
+    "playerBoard computerBoard log"
+    "playerInstructions computerInstructions logInstructions";
+  margin: 50px 50px 0;
 }
 
 .gameLog {
+  grid-area: log;
+  margin: 0 10%;
+  text-align: left;
   resize: none;
-  position: relative;
-  top: 0;
-  left: 25px;
 }
 
-.playerBoard {
-  color: white;
+.playerBoard,
+.computerBoard {
   display: grid;
-  width: 100%;
+  width: 362px;
   grid-template-columns: repeat(11, 2em);
   grid-template-rows: repeat(11, 2em);
   gap: 1px;
   background-color: rgba(140, 177, 140, 0.233);
+  margin: 0 auto;
+}
+
+.playerBoard {
+  grid-area: playerBoard;
+}
+
+.computerBoard {
+  grid-area: computerBoard;
 }
 
 .gridSpace {

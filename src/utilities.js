@@ -83,3 +83,40 @@ export function renderShipPreview(row, column, playerBoard, state, ships) {
 
   return newBoard;
 }
+
+export function generateComputerBoard(ships) {
+  let remaining = ships.length;
+  let newBoard = generateBoardArray();
+  let index = null;
+
+  while (remaining > 0) {
+    let tempBoard = [];
+
+    do {
+      const randomBool = Boolean(Math.floor(Math.random() + 0.5));
+      const randomRow = Math.floor(Math.random() * 10) + 1;
+      const randomColumnInt = Math.floor(Math.random() * 10 + 1);
+      const randomColumnStr = String.fromCharCode(randomColumnInt + 64);
+      index = (10 - randomRow) * 11 + randomColumnInt;
+      tempBoard = [...newBoard];
+
+      tempBoard = renderShipPreview(
+        randomRow,
+        randomColumnStr,
+        tempBoard,
+        { remainingShips: remaining, horizontal: randomBool },
+        ships
+      );
+    } while (tempBoard[index].placingShip !== "allok");
+
+    newBoard = tempBoard.map((tile) => {
+      if (tile.placingShip === "allok") {
+        return { ...tile, ship: true, placingShip: "" };
+      } else {
+        return tile;
+      }
+    });
+    remaining--;
+  }
+  return newBoard;
+}
