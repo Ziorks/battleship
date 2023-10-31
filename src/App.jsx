@@ -45,6 +45,7 @@ function App() {
 
   function placeShip() {
     if (playerBoard.find((tile) => tile.placingShip === "allok")) {
+      const lastShip = state.remainingShips - 1 <= 0;
       setState({
         ...state,
         remainingShips: state.remainingShips - 1,
@@ -52,12 +53,31 @@ function App() {
       setPlayerBoard((currentBoard) => {
         return currentBoard.map((tile) => {
           if (tile.placingShip === "allok") {
-            return { ...tile, ship: true, placingShip: "" };
+            return {
+              ...tile,
+              ship: true,
+              placingShip: "",
+              playable: lastShip ? false : tile.playable,
+            };
           } else {
-            return tile;
+            return {
+              ...tile,
+              playable: lastShip ? false : tile.playable,
+            };
           }
         });
       });
+      if (lastShip) {
+        setComputerBoard(
+          computerBoard.map((tile) => {
+            if (tile.row === "0" || tile.column === "0") {
+              return tile;
+            } else {
+              return { ...tile, playable: true };
+            }
+          })
+        );
+      }
     }
   }
 

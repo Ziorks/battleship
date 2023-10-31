@@ -111,9 +111,9 @@ export function generateComputerBoard(ships) {
 
     newBoard = tempBoard.map((tile) => {
       if (tile.placingShip === "allok") {
-        return { ...tile, ship: true, placingShip: "" };
+        return { ...tile, ship: true, placingShip: "", playable: false };
       } else {
-        return tile;
+        return { ...tile, playable: false };
       }
     });
     remaining--;

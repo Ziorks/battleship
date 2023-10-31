@@ -21,5 +21,11 @@ export function ComputerBoardSpace({ props }) {
         <p>{props.column}</p>
       </div>
     );
+  } else {
+    return (
+      <div className={"gridSpace" + (props.ship ? " ship" : "")}>
+        <i className="fa-regular fa-circle-dot"></i>
+      </div>
+    );
   }
 }
