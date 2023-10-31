@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PlayerBoard } from "./PlayerBoard";
+import { Instructions } from "./Instructions";
 import { generateBoardArray, renderShipPreview } from "./utilities";
 
 const ships = [
@@ -17,6 +18,10 @@ function App() {
     horizontal: false,
     playerTurn: true,
   });
+
+  function toggleRotation() {
+    setState({ ...state, horizontal: !state.horizontal });
+  }
 
   function placeShip() {
     if (playerBoard.find((tile) => tile.placingShip === "allok")) {
@@ -99,37 +104,28 @@ function App() {
     setPlayerBoard(newBoard);
   }
 
+  const p1Board = (
+    <PlayerBoard
+      playerBoard={playerBoard}
+      handleMouseEnter={handleMouseEnter}
+      handleMouseLeave={handleMouseLeave}
+      placeShip={placeShip}
+    />
+  );
+
   return (
     <>
       <div className="gameSpace">
-        <PlayerBoard
-          playerBoard={playerBoard}
-          handleMouseEnter={handleMouseEnter}
-          handleMouseLeave={handleMouseLeave}
-          placeShip={placeShip}
-        />
+        {p1Board}
         <textarea readOnly className="gameLog" rows="22" cols="45"></textarea>
       </div>
-      {state.remainingShips > 0 && (
-        <div className="instructions">
-          <h1>Place your ships</h1>
-          <p>
-            now placing: {ships[state.remainingShips - 1].name}
-            {" - "}
-            {ships[state.remainingShips - 1].size} spaces
-          </p>
-          <button
-            className="btn"
-            onClick={() =>
-              setState({ ...state, horizontal: !state.horizontal })
-            }
-          >
-            Rotate Ship
-          </button>
-          <button className="btn" onClick={() => placeAllRandom()}>
-            Place Remaining Ships Randomly
-          </button>
-        </div>
+      {state.remainingShips && (
+        <Instructions
+          ships={ships}
+          state={state}
+          toggleRotation={toggleRotation}
+          placeAllRandom={placeAllRandom}
+        />
       )}
     </>
   );
