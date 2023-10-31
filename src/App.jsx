@@ -101,12 +101,15 @@ function App() {
 
   return (
     <>
-      <PlayerBoard
-        playerBoard={playerBoard}
-        handleMouseEnter={handleMouseEnter}
-        handleMouseLeave={handleMouseLeave}
-        placeShip={placeShip}
-      />
+      <div className="gameSpace">
+        <PlayerBoard
+          playerBoard={playerBoard}
+          handleMouseEnter={handleMouseEnter}
+          handleMouseLeave={handleMouseLeave}
+          placeShip={placeShip}
+        />
+        <textarea readOnly className="gameLog" rows="22" cols="45"></textarea>
+      </div>
       {state.remainingShips > 0 && (
         <div className="instructions">
           <h1>Place your ships</h1>
