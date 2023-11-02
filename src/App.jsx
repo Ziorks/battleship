@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { PlayerBoard } from "./PlayerBoard";
 import { ComputerBoard } from "./ComputerBoard";
 import { Instructions } from "./Instructions";
+import { Gamelog } from "./Gamelog";
 import {
   generateBoardArray,
   renderShipPreview,
   generateComputerBoard,
 } from "./utilities";
+
+const introMessage = "Welcome to Battleship!\nBegin by placing your ships.";
 
 const ships = [
   { name: "Destroyer", size: 2 },
@@ -14,7 +17,7 @@ const ships = [
   { name: "Cruiser", size: 3 },
   { name: "Battleship", size: 4 },
   { name: "Carrier", size: 5 },
-];
+]; //ship names must be unique
 
 // const ships = [{ name: "shipname", size: 1 }]; //for testing
 
@@ -30,6 +33,7 @@ function App() {
   const [playerTurn, setPlayerTurn] = useState(true);
   const [playerShips, setPlayerShips] = useState(ships);
   const [computerShips, setComputerShips] = useState(ships);
+  const [gamelog, setGamelog] = useState([introMessage]);
   const gameOver = computerShips.length == 0 || playerShips.length == 0;
 
   useEffect(() => {
@@ -45,12 +49,21 @@ function App() {
   }, [state]);
 
   useEffect(() => {
+    let log = document.querySelector(".gameLog");
+    log.scrollTop = log.scrollHeight;
+  }, [gamelog]);
+
+  useEffect(() => {
     if (gameOver) {
       setComputerBoard(
         computerBoard.map((tile) => {
           return { ...tile, playable: false };
         })
       );
+      setGamelog([
+        ...gamelog,
+        (computerShips.length == 0 ? "Player" : "Computer") + " Wins!",
+      ]);
     }
 
     if (!playerTurn && !gameOver) {
@@ -132,17 +145,21 @@ function App() {
   }
 
   function handleBomb(row, column) {
+    const columnStr = String.fromCharCode(column + 64);
     const index = (10 - row) * 11 + column;
     let newBoard = playerTurn ? [...computerBoard] : [...playerBoard];
     newBoard[index] = { ...newBoard[index], hit: true, playable: false };
     playerTurn ? setComputerBoard(newBoard) : setPlayerBoard(newBoard);
     const shipName = newBoard[index].ship;
+    let sunk = false;
     if (shipName) {
       let newShips = playerTurn ? [...computerShips] : [...playerShips];
       newShips = newShips
         .map((ship) => {
           if (ship.name === shipName) {
-            return { ...ship, size: ship.size - 1 };
+            const newSize = ship.size - 1;
+            sunk = newSize <= 0;
+            return { ...ship, size: newSize };
           } else {
             return ship;
           }
@@ -151,6 +168,20 @@ function App() {
       playerTurn ? setComputerShips(newShips) : setPlayerShips(newShips);
     }
     setPlayerTurn(!playerTurn);
+    const activeUser = playerTurn ? "Player" : "Computer";
+    const otherUser = !playerTurn ? "Player" : "Computer";
+    setGamelog([
+      ...gamelog,
+      activeUser +
+        " bombed " +
+        columnStr +
+        row +
+        ": it's a " +
+        (shipName ? "hit!" : "miss.") +
+        (sunk
+          ? "\n" + activeUser + " sunk " + otherUser + "'s " + shipName + "!"
+          : ""),
+    ]);
   }
 
   function playAgain() {
@@ -163,6 +194,7 @@ function App() {
     setPlayerTurn(true);
     setPlayerShips(ships);
     setComputerShips(ships);
+    setGamelog([introMessage]);
   }
 
   return (
@@ -181,16 +213,10 @@ function App() {
         <ComputerBoard
           computerBoard={computerBoard}
           playerTurn={playerTurn}
-          handleBomb={handleBomb}
           gameOver={gameOver}
+          handleBomb={handleBomb}
         />
-        <textarea
-          readOnly
-          className="gameLog"
-          value={
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi totam voluptas odio molestiae saepe fuga pariatur iusto nulla accusamus obcaecati et labore placeat nostrum dignissimos maxime corrupti nesciunt dolorum, tempore vitae aspernatur dolor nam? Perspiciatis eius enim, ab, iste totam quia, minima atque architecto a officiis eveniet rerum voluptatibus sint."
-          }
-        ></textarea>
+        <Gamelog gamelog={gamelog} />
         <Instructions
           ships={ships}
           state={state}

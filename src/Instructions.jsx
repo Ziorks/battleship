@@ -27,7 +27,7 @@ export function Instructions({
   if (playerWins || computerWins) {
     return (
       <div className="instructions-computer">
-        <h1>{(computerWins ? "Computer" : "Player") + "Wins!"}</h1>
+        <h1>{(computerWins ? "Computer" : "Player") + " Wins!"}</h1>
         <button onClick={playAgain} className="btn">
           Play Again?
         </button>
