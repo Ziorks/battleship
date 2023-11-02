@@ -1,6 +1,11 @@
 import { ComputerBoardSpace } from "./ComputerBoardSpace";
 
-export function ComputerBoard({ computerBoard, handleBomb, playerTurn }) {
+export function ComputerBoard({
+  computerBoard,
+  handleBomb,
+  playerTurn,
+  gameOver,
+}) {
   return (
     <div className="computerBoard">
       {computerBoard.map((item) => {
@@ -10,6 +15,7 @@ export function ComputerBoard({ computerBoard, handleBomb, playerTurn }) {
             props={item}
             handleBomb={handleBomb}
             playerTurn={playerTurn}
+            gameOver={gameOver}
           />
         );
       })}

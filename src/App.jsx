@@ -16,6 +16,8 @@ const ships = [
   { name: "Carrier", size: 5 },
 ];
 
+// const ships = [{ name: "shipname", size: 1 }]; //for testing
+
 function App() {
   const [playerBoard, setPlayerBoard] = useState(generateBoardArray());
   const [computerBoard, setComputerBoard] = useState(
@@ -26,6 +28,9 @@ function App() {
     horizontal: false,
   });
   const [playerTurn, setPlayerTurn] = useState(true);
+  const [playerShips, setPlayerShips] = useState(ships);
+  const [computerShips, setComputerShips] = useState(ships);
+  const gameOver = computerShips.length == 0 || playerShips.length == 0;
 
   useEffect(() => {
     const func = (e) => {
@@ -40,7 +45,15 @@ function App() {
   }, [state]);
 
   useEffect(() => {
-    if (!playerTurn) {
+    if (gameOver) {
+      setComputerBoard(
+        computerBoard.map((tile) => {
+          return { ...tile, playable: false };
+        })
+      );
+    }
+
+    if (!playerTurn && !gameOver) {
       let index = null;
       let randomRow = null;
       let randomColumn = null;
@@ -51,7 +64,7 @@ function App() {
       } while (playerBoard[index].hit == true);
       setTimeout(() => {
         handleBomb(randomRow, randomColumn);
-      }, 1000);
+      }, 1500);
     }
   }, [playerTurn]);
 
@@ -71,7 +84,7 @@ function App() {
           if (tile.placingShip === "allok") {
             return {
               ...tile,
-              ship: true,
+              ship: ships[state.remainingShips - 1].name,
               placingShip: "",
               playable: lastShip ? false : tile.playable,
             };
@@ -123,7 +136,33 @@ function App() {
     let newBoard = playerTurn ? [...computerBoard] : [...playerBoard];
     newBoard[index] = { ...newBoard[index], hit: true, playable: false };
     playerTurn ? setComputerBoard(newBoard) : setPlayerBoard(newBoard);
+    const shipName = newBoard[index].ship;
+    if (shipName) {
+      let newShips = playerTurn ? [...computerShips] : [...playerShips];
+      newShips = newShips
+        .map((ship) => {
+          if (ship.name === shipName) {
+            return { ...ship, size: ship.size - 1 };
+          } else {
+            return ship;
+          }
+        })
+        .filter((ship) => ship.size > 0);
+      playerTurn ? setComputerShips(newShips) : setPlayerShips(newShips);
+    }
     setPlayerTurn(!playerTurn);
+  }
+
+  function playAgain() {
+    setPlayerBoard(generateBoardArray());
+    setComputerBoard(generateComputerBoard(ships));
+    setState({
+      remainingShips: ships.length,
+      horizontal: false,
+    });
+    setPlayerTurn(true);
+    setPlayerShips(ships);
+    setComputerShips(ships);
   }
 
   return (
@@ -143,6 +182,7 @@ function App() {
           computerBoard={computerBoard}
           playerTurn={playerTurn}
           handleBomb={handleBomb}
+          gameOver={gameOver}
         />
         <textarea
           readOnly
@@ -154,7 +194,11 @@ function App() {
         <Instructions
           ships={ships}
           state={state}
+          playerTurn={playerTurn}
+          playerShips={playerShips}
+          computerShips={computerShips}
           toggleRotation={toggleRotation}
+          playAgain={playAgain}
         />
       </div>
     </>

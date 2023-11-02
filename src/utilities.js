@@ -5,7 +5,7 @@ export function generateBoardArray() {
     column: "0",
     playable: false,
     hit: false,
-    ship: false,
+    ship: "",
     placingShip: "",
   };
 
@@ -111,7 +111,12 @@ export function generateComputerBoard(ships) {
 
     newBoard = tempBoard.map((tile) => {
       if (tile.placingShip === "allok") {
-        return { ...tile, ship: true, placingShip: "", playable: false };
+        return {
+          ...tile,
+          ship: ships[remaining - 1].name,
+          placingShip: "",
+          playable: false,
+        };
       } else {
         return { ...tile, playable: false };
       }

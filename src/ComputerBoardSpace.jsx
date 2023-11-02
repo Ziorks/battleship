@@ -1,4 +1,9 @@
-export function ComputerBoardSpace({ props, handleBomb, playerTurn }) {
+export function ComputerBoardSpace({
+  props,
+  handleBomb,
+  playerTurn,
+  gameOver,
+}) {
   if (props.playable) {
     return (
       <div
@@ -7,7 +12,7 @@ export function ComputerBoardSpace({ props, handleBomb, playerTurn }) {
             handleBomb(props.row, props.column.charCodeAt() - 64);
           }
         }}
-        className={"gridSpace playableGridSpace"}
+        className="gridSpace playableGridSpace"
       >
         <i className="fa-regular fa-circle-dot"></i>
       </div>
@@ -28,8 +33,7 @@ export function ComputerBoardSpace({ props, handleBomb, playerTurn }) {
     );
   } else if (props.ship && props.hit) {
     return (
-      <div className="gridSpace hit">
-        {/* <i className="fa-solid fa-explosion"></i> */}
+      <div className={"gridSpace hit" + (gameOver ? " ship" : "")}>
         <i className="fa-solid fa-burst"></i>
       </div>
     );
@@ -41,7 +45,7 @@ export function ComputerBoardSpace({ props, handleBomb, playerTurn }) {
     );
   } else {
     return (
-      <div className={"gridSpace"}>
+      <div className={"gridSpace" + (props.ship && gameOver ? " ship" : "")}>
         <i className="fa-regular fa-circle-dot"></i>
       </div>
     );

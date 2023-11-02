@@ -36,7 +36,7 @@ export function PlayerBoardSpace({ props, handleMouseEnter, placeShip }) {
     );
   } else if (props.ship && props.hit) {
     return (
-      <div className="gridSpace hit">
+      <div className="gridSpace hit ship">
         <i className="fa-solid fa-burst"></i>
       </div>
     );
