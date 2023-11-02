@@ -1,8 +1,13 @@
-export function ComputerBoardSpace({ props }) {
+export function ComputerBoardSpace({ props, handleBomb, playerTurn }) {
   if (props.playable) {
     return (
       <div
-        className={"gridSpace playableGridSpace" + (props.ship ? " ship" : "")}
+        onClick={() => {
+          if (playerTurn) {
+            handleBomb(props.row, props.column.charCodeAt() - 64);
+          }
+        }}
+        className={"gridSpace playableGridSpace"}
       >
         <i className="fa-regular fa-circle-dot"></i>
       </div>
@@ -21,9 +26,22 @@ export function ComputerBoardSpace({ props }) {
         <p>{props.column}</p>
       </div>
     );
+  } else if (props.ship && props.hit) {
+    return (
+      <div className="gridSpace hit">
+        {/* <i className="fa-solid fa-explosion"></i> */}
+        <i className="fa-solid fa-burst"></i>
+      </div>
+    );
+  } else if (!props.ship && props.hit) {
+    return (
+      <div className="gridSpace miss">
+        <i className="fa-solid fa-xmark"></i>
+      </div>
+    );
   } else {
     return (
-      <div className={"gridSpace" + (props.ship ? " ship" : "")}>
+      <div className={"gridSpace"}>
         <i className="fa-regular fa-circle-dot"></i>
       </div>
     );

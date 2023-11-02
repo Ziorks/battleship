@@ -24,8 +24,8 @@ function App() {
   const [state, setState] = useState({
     remainingShips: ships.length,
     horizontal: false,
-    playerTurn: true,
   });
+  const [playerTurn, setPlayerTurn] = useState(true);
 
   useEffect(() => {
     const func = (e) => {
@@ -102,6 +102,14 @@ function App() {
     });
   }
 
+  function handleBomb(row, column) {
+    const index = (10 - row) * 11 + column;
+    let newBoard = playerTurn ? [...computerBoard] : [...playerBoard];
+    newBoard[index] = { ...newBoard[index], hit: true, playable: false };
+    playerTurn ? setComputerBoard(newBoard) : setPlayerBoard(newBoard);
+    setPlayerTurn(!playerTurn);
+  }
+
   return (
     <>
       <div className="gameSpace">
@@ -115,7 +123,11 @@ function App() {
           handleMouseLeave={handleMouseLeave}
           placeShip={placeShip}
         />
-        <ComputerBoard computerBoard={computerBoard} />
+        <ComputerBoard
+          computerBoard={computerBoard}
+          playerTurn={playerTurn}
+          handleBomb={handleBomb}
+        />
         <textarea
           readOnly
           className="gameLog"

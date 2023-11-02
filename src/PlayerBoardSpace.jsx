@@ -34,6 +34,18 @@ export function PlayerBoardSpace({ props, handleMouseEnter, placeShip }) {
         <p>{props.column}</p>
       </div>
     );
+  } else if (props.ship && props.hit) {
+    return (
+      <div className="gridSpace hit">
+        <i className="fa-solid fa-burst"></i>
+      </div>
+    );
+  } else if (!props.ship && props.hit) {
+    return (
+      <div className="gridSpace miss">
+        <i className="fa-solid fa-xmark"></i>
+      </div>
+    );
   } else {
     return (
       <div className={"gridSpace" + (props.ship ? " ship" : "")}>
