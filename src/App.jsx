@@ -39,6 +39,22 @@ function App() {
     };
   }, [state]);
 
+  useEffect(() => {
+    if (!playerTurn) {
+      let index = null;
+      let randomRow = null;
+      let randomColumn = null;
+      do {
+        randomRow = Math.floor(Math.random() * 10) + 1;
+        randomColumn = Math.floor(Math.random() * 10 + 1);
+        index = (10 - randomRow) * 11 + randomColumn;
+      } while (playerBoard[index].hit == true);
+      setTimeout(() => {
+        handleBomb(randomRow, randomColumn);
+      }, 1000);
+    }
+  }, [playerTurn]);
+
   function toggleRotation() {
     setState({ ...state, horizontal: !state.horizontal });
   }
