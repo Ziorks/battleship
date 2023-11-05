@@ -7,6 +7,7 @@ import {
   generateBoardArray,
   renderShipPreview,
   generateComputerBoard,
+  generateMemory,
 } from "./utilities";
 
 const introMessage = "Welcome to Battleship!\nBegin by placing your ships.";
@@ -34,6 +35,7 @@ function App() {
   const [playerShips, setPlayerShips] = useState(ships);
   const [computerShips, setComputerShips] = useState(ships);
   const [gamelog, setGamelog] = useState([introMessage]);
+  const [compMemory, setCompMemory] = useState([]);
   const gameOver = computerShips.length == 0 || playerShips.length == 0;
 
   useEffect(() => {
@@ -68,15 +70,81 @@ function App() {
 
     if (!playerTurn && !gameOver) {
       let index = null;
-      let randomRow = null;
-      let randomColumn = null;
-      do {
-        randomRow = Math.floor(Math.random() * 10) + 1;
-        randomColumn = Math.floor(Math.random() * 10 + 1);
-        index = (10 - randomRow) * 11 + randomColumn;
-      } while (playerBoard[index].hit == true);
+      let row = null;
+      let column = null;
+      if (compMemory.length > 0) {
+        let newMemory = { ...compMemory[0] };
+        let searching = true;
+        do {
+          const location = newMemory.location;
+          const move = newMemory.moves[0];
+          row = location.row + move.row * move.count;
+          column = location.column + move.column * move.count;
+          newMemory.moves[0].count++;
+          index = (10 - row) * 11 + column;
+          const invalidTarget =
+            row < 1 ||
+            row > 10 ||
+            column < 1 ||
+            column > 10 ||
+            playerBoard[index].hit == true;
+          if (invalidTarget) {
+            newMemory.moves.shift();
+          } else {
+            searching = false;
+          }
+        } while (searching);
+        const shipName = playerBoard[index].ship;
+        const sunk =
+          playerShips.filter(
+            (ship) => ship.name === shipName && ship.size - 1 <= 0
+          ).length > 0;
+        if (shipName === newMemory.ship) {
+          if (sunk) {
+            setCompMemory(compMemory.filter((item) => item.ship != shipName));
+          } else {
+            setCompMemory(compMemory.toSpliced(0, 1, newMemory));
+          }
+        } else if (shipName) {
+          if (compMemory.find((item) => item.ship == shipName)) {
+            if (sunk) {
+              newMemory.moves.shift();
+              setCompMemory(
+                compMemory
+                  .splice(0, 1, newMemory)
+                  .filter((item) => item.ship != shipName)
+              );
+            } else {
+              setCompMemory([
+                ...compMemory
+                  .splice(0, 1, newMemory)
+                  .filter((item) => item.ship != shipName),
+                generateMemory(shipName, row, column),
+              ]);
+            }
+          } else {
+            setCompMemory([
+              ...compMemory.toSpliced(0, 1, newMemory),
+              generateMemory(shipName, row, column),
+            ]);
+          }
+        } else {
+          newMemory.moves.shift();
+          setCompMemory(compMemory.toSpliced(0, 1, newMemory));
+        }
+      } else {
+        do {
+          row = Math.floor(Math.random() * 10) + 1;
+          column = Math.floor(Math.random() * 10) + 1;
+          index = (10 - row) * 11 + column;
+        } while (playerBoard[index].hit == true);
+        const shipName = playerBoard[index].ship;
+        if (shipName) {
+          setCompMemory([generateMemory(shipName, row, column)]);
+        }
+      }
       setTimeout(() => {
-        handleBomb(randomRow, randomColumn);
+        handleBomb(row, column);
       }, 1500);
     }
   }, [playerTurn]);

@@ -125,3 +125,20 @@ export function generateComputerBoard(ships) {
   }
   return newBoard;
 }
+
+export function generateMemory(shipName, row, column) {
+  const UP = { row: -1, column: 0, count: 1 };
+  const DOWN = { row: 1, column: 0, count: 1 };
+  const LEFT = { row: 0, column: -1, count: 1 };
+  const RIGHT = { row: 0, column: 1, count: 1 };
+  const UPDOWN = [UP, DOWN].sort(() => Math.random() - 0.5);
+  const LEFTRIGHT = [LEFT, RIGHT].sort(() => Math.random() - 0.5);
+  const moves = [UPDOWN, LEFTRIGHT].sort(() => Math.random() - 0.5).flat();
+
+  let memory = {
+    ship: shipName,
+    location: { row, column },
+    moves,
+  };
+  return memory;
+}
