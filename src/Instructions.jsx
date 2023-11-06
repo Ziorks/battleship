@@ -45,7 +45,6 @@ export function Instructions({
     return (
       <div className="instructions-computer">
         <h1>It's the computers turn</h1>
-        <p>say your prayers</p>
       </div>
     );
   }

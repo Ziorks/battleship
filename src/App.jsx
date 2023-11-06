@@ -263,6 +263,7 @@ function App() {
     setPlayerShips(ships);
     setComputerShips(ships);
     setGamelog([introMessage]);
+    setCompMemory([]);
   }
 
   return (
